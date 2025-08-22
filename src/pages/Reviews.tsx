@@ -1,0 +1,1 @@
+export default function Reviews(){return (<section><h1 className='text-3xl font-bold'>Reviews</h1><div className='space-y-4 mt-4'><blockquote className='p-4 border rounded-xl'>“Clean lines, on time, on budget.” — A.M.</blockquote><blockquote className='p-4 border rounded-xl'>“Protected everything and finished ahead of schedule.” — L.K.</blockquote></div></section>)}

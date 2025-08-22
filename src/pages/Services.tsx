@@ -1,0 +1,1 @@
+export default function Services(){return (<section className='space-y-6'><h1 className='text-3xl font-bold'>Services</h1><ul className='grid md:grid-cols-2 gap-4 list-disc pl-5 mt-2 text-slate-700'><li>Interior Painting</li><li>Exterior Painting</li><li>Staining & Decks</li><li>Commercial</li></ul></section>)}
