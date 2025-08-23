@@ -22,7 +22,9 @@ const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
-        body: { backgroundColor: '#f5f7fb' },
+        body: {
+          backgroundImage: 'linear-gradient(135deg, #f5f7fb 0%, #e0e5ec 100%)',
+        },
       },
     },
     MuiAppBar: {
