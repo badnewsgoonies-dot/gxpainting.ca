@@ -1,1 +1,29 @@
-export default function FAQ(){return (<section><h1 className='text-3xl font-bold'>FAQ</h1><details className='p-4 border rounded-xl mt-4'><summary className='font-medium'>How fast can I get a quote?</summary><p>Same day in most cases after a brief call or photos.</p></details><details className='p-4 border rounded-xl mt-4'><summary className='font-medium'>Do you offer a warranty?</summary><p>Yes—2-year workmanship warranty on interior and exterior projects.</p></details></section>)}
+
+import { Container, Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+export default function FAQ(){
+  return (
+    <Container maxWidth="lg" sx={{ py:6 }}>
+      <Typography variant="h4" sx={{ mb:2 }}>FAQ</Typography>
+
+      <Accordion defaultExpanded>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>How fast can I get a quote?</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          Same day in most cases after a brief call or photos.
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>Do you offer a warranty?</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          Yes—2-year workmanship warranty on interior and exterior projects.
+        </AccordionDetails>
+      </Accordion>
+    </Container>
+  );
+}

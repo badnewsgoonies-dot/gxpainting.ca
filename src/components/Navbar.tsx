@@ -1,28 +1,34 @@
 
-import { Link, NavLink } from 'react-router-dom'
-import ThemeToggle from './ThemeToggle'
-const linkCls = ({isActive}:{isActive:boolean}) => `hover:text-emerald-700 ${isActive ? 'text-emerald-700 font-semibold' : ''}`
+import { AppBar, Toolbar, Container, Box, Button, Link as MuiLink } from '@mui/material';
+import { Link, NavLink } from 'react-router-dom';
+
+const navLinkStyles = ({ isActive }: { isActive: boolean }) =>
+  ({ color: isActive ? '#059669' : '#0f172a', fontWeight: isActive ? 600 : 500, textDecoration: 'none' });
+
 export default function Navbar(){
   return (
-    <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/80 backdrop-blur border-b border-slate-200 dark:border-slate-800">
-      <div className="container mx-auto px-4 flex items-center justify-between h-16">
-        <Link to="/" className="flex items-center gap-2 font-semibold">
-          <img src="/logo-mark.svg" alt="GX logo" className="w-9 h-9" />
-          GX Painting LTD
-        </Link>
-        <nav className="hidden md:flex items-center gap-6 text-sm">
-          <NavLink to="/services" className={linkCls}>Services</NavLink>
-          <NavLink to="/gallery" className={linkCls}>Gallery</NavLink>
-          <NavLink to="/process" className={linkCls}>Process</NavLink>
-          <NavLink to="/reviews" className={linkCls}>Reviews</NavLink>
-          <NavLink to="/faq" className={linkCls}>FAQ</NavLink>
-          <NavLink to="/contact" className={linkCls}>Contact</NavLink>
-        </nav>
-        <div className="flex items-center gap-3">
-          <ThemeToggle />
-          <Link to="/contact" className="text-sm bg-emerald-600 text-white px-3 py-2 rounded-lg">Free Quote</Link>
-        </div>
-      </div>
-    </header>
-  )
+    <AppBar position="sticky" elevation={0} color="transparent">
+      <Container maxWidth="lg">
+        <Toolbar sx={{ justifyContent: 'space-between', minHeight: 64 }}>
+          <MuiLink component={Link} to="/" underline="none" sx={{ display:'flex', alignItems:'center', gap:1.25, fontWeight:700, color:'inherit' }}>
+            <img src="/logo-bold.svg" alt="GX logo" width={36} height={36} />
+            GX Painting LTD
+          </MuiLink>
+
+          <Box sx={{ display: { xs:'none', md:'flex' }, gap: 3 }}>
+            <MuiLink component={NavLink} to="/services" style={navLinkStyles}>Services</MuiLink>
+            <MuiLink component={NavLink} to="/gallery"  style={navLinkStyles}>Gallery</MuiLink>
+            <MuiLink component={NavLink} to="/process"  style={navLinkStyles}>Process</MuiLink>
+            <MuiLink component={NavLink} to="/reviews"  style={navLinkStyles}>Reviews</MuiLink>
+            <MuiLink component={NavLink} to="/faq"      style={navLinkStyles}>FAQ</MuiLink>
+            <MuiLink component={NavLink} to="/contact"  style={navLinkStyles}>Contact</MuiLink>
+          </Box>
+
+          <Button component={Link} to="/contact" size="medium" color="primary" variant="contained">
+            Free Quote
+          </Button>
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
 }

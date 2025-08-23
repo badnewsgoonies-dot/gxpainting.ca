@@ -1,5 +1,7 @@
 
 import { useState } from 'react';
+import { Container, TextField, Button, Alert, Stack, Typography } from '@mui/material';
+
 const ENDPOINT = '/.netlify/functions/mail';
 
 export default function Contact(){
@@ -11,7 +13,11 @@ export default function Contact(){
     const fd = new FormData(e.currentTarget);
     setStatus('sending'); setErr('');
     try {
-      const payload = { name:String(fd.get('name')||''), email:String(fd.get('email')||''), details:String(fd.get('details')||''), _subject:'New lead from website', _template:'box', _captcha:'false' };
+      const payload = {
+        name:String(fd.get('name')||''),
+        email:String(fd.get('email')||''),
+        details:String(fd.get('details')||'')
+      };
       const res = await fetch(ENDPOINT, { method:'POST', headers:{ 'Content-Type':'application/json', 'Accept':'application/json' }, body: JSON.stringify(payload) });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setStatus('sent'); (e.target as HTMLFormElement).reset();
@@ -19,21 +25,21 @@ export default function Contact(){
   }
 
   return (
-    <section className="space-y-6">
-      <h1 className="text-3xl font-bold">Contact</h1>
+    <Container maxWidth="md" sx={{ py:6 }}>
+      <Typography variant="h4" sx={{ mb:2 }}>Contact</Typography>
 
-      {status==='sent' && <div className="rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-800 p-3">Thanks! Your message was sent. (On first use, FormSubmit will email a verification link to activate delivery.)</div>}
-      {status==='error' && <div className="rounded-lg border border-red-300 bg-red-50 text-red-800 p-3">Sorry, something went wrong. {err} — You can also email us at <a className="underline" href="mailto:gxpainting@hotmail.com">gxpainting@hotmail.com</a>.</div>}
+      {status==='sent' && <Alert severity="success">Thanks! Your message was sent.</Alert>}
+      {status==='error' && <Alert severity="error">Sorry, something went wrong. {err} — You can also email <a href="mailto:gxpainting@hotmail.com">gxpainting@hotmail.com</a>.</Alert>}
 
-      <form className="grid md:grid-cols-2 gap-4 max-w-2xl" onSubmit={onSubmit}>
-        <div className="hidden"><label>Leave this empty<input type="text" name="hp_field" tabIndex={-1} autoComplete="off" value={hp} onChange={(e)=>setHp(e.target.value)} /></label></div>
-        <div><label className="text-sm">Name</label><input name="name" required className="mt-1 w-full border rounded-xl px-3 py-2" /></div>
-        <div><label className="text-sm">Email</label><input name="email" type="email" required className="mt-1 w-full border rounded-xl px-3 py-2" /></div>
-        <div className="md:col-span-2"><label className="text-sm">Project details</label><textarea name="details" required className="mt-1 w-full border rounded-xl px-3 py-2" rows={4}></textarea></div>
-        <button disabled={status==='sending'} className="bg-emerald-600 text-white px-4 py-2 rounded-lg disabled:opacity-60">{status==='sending'?'Sending…':'Send'}</button>
+      <form onSubmit={onSubmit}>
+        <Stack spacing={2}>
+          <TextField name="name" label="Name" required />
+          <TextField name="email" label="Email" type="email" required />
+          <TextField name="details" label="Project details" multiline minRows={4} required />
+          <input type="text" name="hp_field" value={hp} onChange={(e)=>setHp(e.target.value)} style={{ display:'none' }} aria-hidden />
+          <Button type="submit" disabled={status==='sending'}>{status==='sending'?'Sending…':'Send'}</Button>
+        </Stack>
       </form>
-
-      <p className="text-sm text-slate-600">Prefer email? <a className="underline" href="mailto:gxpainting@hotmail.com">gxpainting@hotmail.com</a></p>
-    </section>
+    </Container>
   )
 }
