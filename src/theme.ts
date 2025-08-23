@@ -1,23 +1,24 @@
+import { createTheme } from '@mui/material/styles'
 
-import { createTheme } from '@mui/material/styles';
-
-export const theme = createTheme({
+const theme = createTheme({
   palette: {
     primary: { main: '#059669' },
     secondary: { main: '#0f172a' },
-    background: { default: '#ffffff' }
+    background: { default: '#0b1020', paper: '#0e1426' },
+    text: { primary: '#e5e7eb', secondary: '#a6adbb' },
   },
-  shape: { borderRadius: 12 },
+  shape: { borderRadius: 14 },
   typography: {
-    fontFamily: `'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif`,
+    fontFamily: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica Neue','Arial'].join(','),
+    h1: { fontWeight: 800, letterSpacing: -0.5 },
+    h2: { fontWeight: 700 },
+    h3: { fontWeight: 700 },
+    button: { textTransform: 'none', fontWeight: 700 },
   },
   components: {
-    MuiButton: {
-      defaultProps: { variant: 'contained', disableElevation: true },
-      styleOverrides: { root: { textTransform: 'none', fontWeight: 600 } }
-    },
-    MuiAppBar: {
-      styleOverrides: { root: { background: 'rgba(255,255,255,.9)', backdropFilter: 'blur(8px)' } }
-    }
-  }
-});
+    MuiPaper: { styleOverrides: { root: { backgroundImage: 'none' } } },
+    MuiButton: { defaultProps: { disableElevation: true } },
+  },
+})
+
+export default theme

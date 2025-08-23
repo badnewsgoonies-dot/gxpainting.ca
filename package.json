@@ -1,30 +1,22 @@
 {
-  "name": "gx-painting-site",
-  "private": true,
+  "name": "gx-painting-onepage",
   "version": "1.0.0",
-  "type": "module",
+  "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview",
-    "fmt": "prettier -w ."
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
+    "@mui/material": "^5.15.0",
+    "@mui/icons-material": "^5.15.0",
+    "lucide-react": "^0.379.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.23.1",
-    "@mui/material": "^5.15.20",
-    "@mui/icons-material": "^5.15.20",
-    "@emotion/react": "^11.13.0",
-    "@emotion/styled": "^11.13.0"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "typescript": "^5.4.5",
-    "vite": "^5.3.4",
-    "@vitejs/plugin-react": "^4.3.1",
-    "tailwindcss": "^3.4.7",
-    "postcss": "^8.4.41",
-    "autoprefixer": "^10.4.19",
-    "prettier": "^3.3.3"
+    "typescript": "^5.2.2",
+    "vite": "^5.0.0",
+    "@vitejs/plugin-react": "^4.0.0"
   }
 }
