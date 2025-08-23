@@ -1,13 +1,17 @@
+// File: src/single-page/App.tsx
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AppBar, Box, Button, Chip, Container, Divider, IconButton, Link, Paper, Stack, Toolbar, Typography } from '@mui/material'
 import { CheckCircle2, ChevronDown, Phone, Star, Send, Menu as MenuIcon } from 'lucide-react'
 
-type SectionKey = 'hero' | 'services' | 'gallery' | 'process' | 'reviews' | 'faq' | 'contact'
+// Single-page sections
+export type SectionKey = 'hero' | 'services' | 'gallery' | 'process' | 'reviews' | 'faq' | 'contact'
 const SECTION_ORDER: SectionKey[] = ['hero','services','gallery','process','reviews','faq','contact']
 
 function useInfiniteSections(total: number) {
   const [visible, setVisible] = useState(1)
   const sentinelRef = useRef<HTMLDivElement | null>(null)
+
+  // Reveal next section when sentinel enters view
   useEffect(() => {
     const el = sentinelRef.current
     if (!el) return
@@ -18,11 +22,29 @@ function useInfiniteSections(total: number) {
     io.observe(el)
     return () => io.disconnect()
   }, [total])
-  return { visible, sentinelRef }
+
+  // Desktop fallback: ensure page initially contains >1 viewport of content
+  useEffect(() => {
+    const fill = () => {
+      const docH = document.documentElement.scrollHeight
+      const winH = window.innerHeight
+      if (docH <= winH * 1.2 && visible < total) {
+        setVisible((v) => Math.min(v + 1, total))
+        requestAnimationFrame(fill)
+      }
+    }
+    fill()
+  }, [visible, total])
+
+  return { visible, setVisible, sentinelRef }
 }
 
-function Nav() {
+function Nav({ onNav }: { onNav: (id: SectionKey) => void }) {
   const [open, setOpen] = useState(false)
+  const clickTo = (id: SectionKey) => (e: React.MouseEvent) => {
+    e.preventDefault()
+    onNav(id)
+  }
   return (
     <AppBar position="sticky" color="default" elevation={0}>
       <Toolbar sx={{ gap: 2 }}> 
@@ -30,12 +52,12 @@ function Nav() {
         <Box sx={{ flex: 1 }} />
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ display: { xs: open ? 'flex' : 'none', sm: 'flex' } }}>
           {SECTION_ORDER.map((id) => (
-            <Link key={id} href={`#${id}`} underline="none" sx={{ '&:hover': { color: 'text.primary' } }}>
+            <Link key={id} href={`#${id}`} onClick={clickTo(id)} underline="none" sx={{ color: 'text.secondary', '&:hover': { color: 'text.primary' } }}>
               {id.charAt(0).toUpperCase() + id.slice(1)}
             </Link>
           ))}
         </Stack>
-        <Button href="#contact" variant="contained" startIcon={<Phone size={18} />} sx={{ ml: 1 }}>Free Estimate</Button>
+        <Button href="#contact" onClick={clickTo('contact')} variant="contained" startIcon={<Phone size={18} />} sx={{ ml: 1 }}>Free Estimate</Button>
         <IconButton onClick={() => setOpen((v) => !v)} sx={{ display: { xs: 'inline-flex', sm: 'none' } }}>
           <MenuIcon />
         </IconButton>
@@ -51,7 +73,7 @@ function Hero() {
       <Container>
         <Stack spacing={3} alignItems="start">
           <Chip label="Trusted • Fast • Clean" variant="outlined" />
-          <Typography variant="h1" sx={{ fontSize: { xs: 36, md: 60 }, lineHeight: 1.05 }}>
+          <Typography variant="h1" sx={{ fontSize: { xs: 36, md: 56 }, lineHeight: 1.05 }}>
             Beautiful finishes, <Box component="span" sx={{ color: 'primary.main' }}>zero hassle</Box>.
           </Typography>
           <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 760 }}>
@@ -206,8 +228,11 @@ function Input(props: any) {
   return (
     <Box sx={{ display: 'grid', gap: 0.5, width: '100%' }}>
       <Typography variant="caption" color="text.secondary">{props.label}</Typography>
-      <Box component="input" {...props} className="rounded-xl" sx={{
-        bgcolor: '#fff', border: '1px solid rgba(0,0,0,0.1)', px: 2, py: 1.25,
+      <Box component="input" {...props} sx={{
+        borderRadius: 1.5,
+        bgcolor: '#fff',
+        border: '1px solid rgba(0,0,0,0.12)',
+        px: 2, py: 1.25,
         '&:focus': { outline: '2px solid', outlineColor: 'primary.main' }
       }} />
     </Box>
@@ -242,7 +267,7 @@ function StickyCTA() {
 
 function Section({ id, title, subtitle, children }: { id: string, title: string, subtitle?: string, children: React.ReactNode }) {
   return (
-    <Box id={id} sx={{ py: { xs: 8, md: 12 }, backgroundColor: '#f5f7fb' }}>
+    <Box id={id} sx={{ py: { xs: 8, md: 12 }, backgroundColor: '#f5f7fb', scrollMarginTop: { xs: '72px', md: '84px' } }}>
       <Container>
         <Stack spacing={3} sx={{ mb: 4 }}>
           <Typography variant="h3">{title}</Typography>
@@ -273,15 +298,38 @@ function ScrollHint() {
 }
 
 export default function App() {
+  const { visible, setVisible, sentinelRef } = useInfiniteSections(SECTION_ORDER.length)
+
+  // Ensure hash targets work even if the section isn't revealed yet
+  const onNav = (id: SectionKey) => {
+    const index = SECTION_ORDER.indexOf(id)
+    if (index !== -1) {
+      setVisible((v) => Math.max(v, index + 1))
+      requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      })
+    }
+  }
+
+  // Handle initial load with a hash (e.g., /#contact)
+  useEffect(() => {
+    const hash = (window.location.hash || '').replace('#','') as SectionKey
+    if (SECTION_ORDER.includes(hash)) onNav(hash)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const sections = useMemo(() => ({
     hero: <Hero />, services: <Services />, gallery: <Gallery />, process: <Process />, reviews: <Reviews />, faq: <FAQ />, contact: <Contact />
   }), [])
-  const { visible, sentinelRef } = useInfiniteSections(SECTION_ORDER.length)
+
   return (
     <Box>
-      <Nav />
-      {SECTION_ORDER.slice(0, visible).map((k) => <React.Fragment key={k}>{sections[k]}</React.Fragment>)}
-      <div ref={sentinelRef} />
+      <Nav onNav={onNav} />
+      {SECTION_ORDER.slice(0, visible).map((k) => (
+        <React.Fragment key={k}>{sections[k]}</React.Fragment>
+      ))}
+      {/* Thin sentinel to reveal the next section as you scroll */}
+      <Box ref={sentinelRef} sx={{ height: 1 }} />
       <Footer />
       <StickyCTA />
     </Box>
