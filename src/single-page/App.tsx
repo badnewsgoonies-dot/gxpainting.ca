@@ -3,8 +3,6 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AppBar, Box, Button, Chip, Container, Divider, IconButton, Link, Paper, Stack, Toolbar, Typography } from '@mui/material'
 import { CheckCircle2, ChevronDown, Phone, Star, Send, Menu as MenuIcon } from 'lucide-react'
 
-// WHY: One-file single-page shell to simplify integration; sections are lazy-revealed for an "infinite scroll" feel.
-
 type SectionKey = 'hero' | 'services' | 'gallery' | 'process' | 'reviews' | 'faq' | 'contact'
 
 const SECTION_ORDER: SectionKey[] = ['hero','services','gallery','process','reviews','faq','contact']
@@ -32,9 +30,9 @@ function useInfiniteSections(total: number) {
 function Nav() {
   const [open, setOpen] = useState(false)
   return (
-    <AppBar position="sticky" color="transparent" sx={{ backdropFilter: 'saturate(140%) blur(8px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+    <AppBar position="sticky" color="default" elevation={0} sx={{ borderBottom: '1px solid rgba(0,0,0,0.08)', backgroundColor: '#ffffffcc', backdropFilter: 'blur(8px)' }}>
       <Toolbar sx={{ gap: 2 }}> 
-        <Typography variant="h6" sx={{ fontWeight: 800 }}>GX Painting</Typography>
+        <Typography variant="h6" sx={{ fontWeight: 800, color: 'text.primary' }}>GX Painting</Typography>
         <Box sx={{ flex: 1 }} />
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ display: { xs: open ? 'flex' : 'none', sm: 'flex' } }}>
           {SECTION_ORDER.map((id) => (
@@ -54,12 +52,11 @@ function Nav() {
 
 function Hero() {
   return (
-    <Box id="hero" sx={{ position: 'relative', overflow: 'hidden', py: { xs: 10, md: 16 } }}>
-      <GradientBlobs />
+    <Box id="hero" sx={{ position: 'relative', overflow: 'hidden', py: { xs: 10, md: 16 }, backgroundColor: '#f9fafb' }}>
       <Container>
         <Stack spacing={3} alignItems="start">
           <Chip label="Trusted • Fast • Clean" variant="outlined" />
-          <Typography variant="h1" sx={{ fontSize: { xs: 36, md: 60 }, lineHeight: 1.05 }}>
+          <Typography variant="h1" sx={{ fontSize: { xs: 36, md: 60 }, lineHeight: 1.05, color: 'text.primary' }}>
             Beautiful finishes, <Box component="span" sx={{ color: 'primary.main' }}>zero hassle</Box>.
           </Typography>
           <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 760 }}>
@@ -93,7 +90,7 @@ function Services() {
     <Section id="services" title="Services" subtitle="Everything you need, done right">
       <Stack direction="row" useFlexGap flexWrap="wrap" spacing={2}>
         {items.map((it) => (
-          <Paper key={it.title} sx={{ p: 3, flex: '1 1 280px', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <Paper key={it.title} sx={{ p: 3, flex: '1 1 280px', border: '1px solid rgba(0,0,0,0.08)' }}>
             <Typography variant="h6" sx={{ mb: 1 }}>{it.title}</Typography>
             <Typography variant="body2" color="text.secondary">{it.desc}</Typography>
           </Paper>
@@ -134,7 +131,7 @@ function Process() {
     <Section id="process" title="Our Process" subtitle="Smooth from first call to final coat">
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
         {steps.map((s) => (
-          <Paper key={s.k} sx={{ p: 3, flex: 1, border: '1px solid rgba(255,255,255,0.06)' }}>
+          <Paper key={s.k} sx={{ p: 3, flex: 1, border: '1px solid rgba(0,0,0,0.08)' }}>
             <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
               <CheckCircle2 />
               <Typography variant="h6">{s.t}</Typography>
@@ -157,7 +154,7 @@ function Reviews() {
     <Section id="reviews" title="Happy customers" subtitle="Homeowners rate us 4.9/5">
       <Stack spacing={2}>
         {reviews.map((r, i) => (
-          <Paper key={i} sx={{ p: 3, border: '1px solid rgba(255,255,255,0.06)' }}>
+          <Paper key={i} sx={{ p: 3, border: '1px solid rgba(0,0,0,0.08)' }}>
             <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
               {Array.from({ length: 5 }).map((_, j) => <Star key={j} size={16} />)}
               <Typography variant="body2" color="text.secondary">Verified</Typography>
@@ -181,7 +178,7 @@ function FAQ() {
     <Section id="faq" title="FAQ" subtitle="Answers to common questions">
       <Stack spacing={1.5}>
         {faqs.map((f) => (
-          <Paper key={f.q} sx={{ p: 2.5, border: '1px solid rgba(255,255,255,0.06)' }}>
+          <Paper key={f.q} sx={{ p: 2.5, border: '1px solid rgba(0,0,0,0.08)' }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>{f.q}</Typography>
             <Typography variant="body2" color="text.secondary">{f.a}</Typography>
           </Paper>
@@ -194,7 +191,7 @@ function FAQ() {
 function Contact() {
   return (
     <Section id="contact" title="Get your free estimate" subtitle="Tell us about your project">
-      <Paper component="form" action="/.netlify/functions/mail" method="POST" sx={{ p: 3, display: 'grid', gap: 2, border: '1px solid rgba(255,255,255,0.06)' }}>
+      <Paper component="form" action="/.netlify/functions/mail" method="POST" sx={{ p: 3, display: 'grid', gap: 2, border: '1px solid rgba(0,0,0,0.08)' }}>
         <input type="hidden" name="_honeypot" value="" />
         <input type="hidden" name="_subject" value="New estimate request" />
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
@@ -206,7 +203,7 @@ function Contact() {
         <Input name="details" label="Project details" multiline rows={4} required />
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <Button type="submit" variant="contained" startIcon={<Send size={18} />}>Request estimate</Button>
-          <Button href="tel:+14165551234" variant="outlined" startIcon={<Phone size={18} />}>Call (416) 555‑1234</Button>
+          <Button href="tel:+14165551234" variant="outlined" startIcon={<Phone size={18} />}>Call (416) 555-1234</Button>
         </Stack>
         <Typography variant="caption" color="text.secondary">By submitting, you agree to be contacted about your project.</Typography>
       </Paper>
@@ -219,8 +216,8 @@ function Input(props: any) {
     <Box sx={{ display: 'grid', gap: 0.5, width: '100%' }}>
       <Typography variant="caption" color="text.secondary">{props.label}</Typography>
       <Box component="input" {...props} className="rounded-xl" sx={{
-        bgcolor: 'background.paper',
-        border: '1px solid rgba(255,255,255,0.08)',
+        bgcolor: '#fff',
+        border: '1px solid rgba(0,0,0,0.1)',
         px: 2, py: 1.25,
         color: 'text.primary',
         '&:focus': { outline: '2px solid', outlineColor: 'primary.main' }
@@ -247,7 +244,7 @@ function Footer() {
 
 function StickyCTA() {
   return (
-    <Paper elevation={0} sx={{ position: 'fixed', bottom: 16, left: 0, right: 0, mx: 'auto', maxWidth: 980, p: 1.5, display: 'flex', gap: 1, alignItems: 'center', border: '1px solid rgba(255,255,255,0.10)', backdropFilter: 'blur(8px)', backgroundColor: 'rgba(15,23,42,0.6)' }}>
+    <Paper elevation={3} sx={{ position: 'fixed', bottom: 16, left: 0, right: 0, mx: 'auto', maxWidth: 980, p: 1.5, display: 'flex', gap: 1, alignItems: 'center', border: '1px solid rgba(0,0,0,0.1)', backgroundColor: '#ffffffee', backdropFilter: 'blur(6px)' }}>
       <Typography sx={{ flex: 1 }}>Ready to love your walls?</Typography>
       <Button href="#contact" variant="contained">Get Estimate</Button>
       <Button href="tel:+14165551234" variant="outlined" startIcon={<Phone size={18} />}>Call</Button>
@@ -257,7 +254,7 @@ function StickyCTA() {
 
 function Section({ id, title, subtitle, children }: { id: string, title: string, subtitle?: string, children: React.ReactNode }) {
   return (
-    <Box id={id} sx={{ py: { xs: 8, md: 12 } }}>
+    <Box id={id} sx={{ py: { xs: 8, md: 12 }, backgroundColor: '#f9fafb' }}>
       <Container>
         <Stack spacing={3} sx={{ mb: 4 }}>
           <Typography variant="h3">{title}</Typography>
@@ -265,15 +262,6 @@ function Section({ id, title, subtitle, children }: { id: string, title: string,
         </Stack>
         {children}
       </Container>
-    </Box>
-  )
-}
-
-function GradientBlobs() {
-  return (
-    <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -1, overflow: 'hidden' }}>
-      <Box sx={{ position: 'absolute', top: -120, left: -120, width: 360, height: 360, borderRadius: '50%', filter: 'blur(80px)', background: 'radial-gradient(closest-side,#10b981,transparent)' }} />
-      <Box sx={{ position: 'absolute', bottom: -140, right: -140, width: 420, height: 420, borderRadius: '50%', filter: 'blur(90px)', background: 'radial-gradient(closest-side,#22d3ee,transparent)' }} />
     </Box>
   )
 }
@@ -299,11 +287,9 @@ export default function App() {
       {SECTION_ORDER.slice(0, visible).map((k) => (
         <React.Fragment key={k}>{sections[k]}</React.Fragment>
       ))}
-      {/* sentinel that reveals the next section when visible */}
       <div ref={sentinelRef} />
       <Footer />
       <StickyCTA />
     </Box>
   )
 }
-
