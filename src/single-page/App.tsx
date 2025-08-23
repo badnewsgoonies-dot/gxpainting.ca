@@ -1,42 +1,36 @@
-// File: src/single-page/App.tsx
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AppBar, Box, Button, Chip, Container, Divider, IconButton, Link, Paper, Stack, Toolbar, Typography } from '@mui/material'
 import { CheckCircle2, ChevronDown, Phone, Star, Send, Menu as MenuIcon } from 'lucide-react'
 
 type SectionKey = 'hero' | 'services' | 'gallery' | 'process' | 'reviews' | 'faq' | 'contact'
-
 const SECTION_ORDER: SectionKey[] = ['hero','services','gallery','process','reviews','faq','contact']
 
 function useInfiniteSections(total: number) {
   const [visible, setVisible] = useState(1)
   const sentinelRef = useRef<HTMLDivElement | null>(null)
-
   useEffect(() => {
     const el = sentinelRef.current
     if (!el) return
     const io = new IntersectionObserver((entries) => {
       const entry = entries[0]
-      if (entry.isIntersecting) {
-        setVisible((v) => Math.min(v + 1, total))
-      }
+      if (entry.isIntersecting) setVisible((v) => Math.min(v + 1, total))
     }, { rootMargin: '200px 0px 400px 0px', threshold: 0 })
     io.observe(el)
     return () => io.disconnect()
   }, [total])
-
-  return { visible, sentinelRef, setVisible }
+  return { visible, sentinelRef }
 }
 
 function Nav() {
   const [open, setOpen] = useState(false)
   return (
-    <AppBar position="sticky" color="default" elevation={0} sx={{ borderBottom: '1px solid rgba(0,0,0,0.08)', backgroundColor: '#ffffffcc', backdropFilter: 'blur(8px)' }}>
+    <AppBar position="sticky" color="default" elevation={0}>
       <Toolbar sx={{ gap: 2 }}> 
-        <Typography variant="h6" sx={{ fontWeight: 800, color: 'text.primary' }}>GX Painting</Typography>
+        <Typography variant="h6" sx={{ fontWeight: 800 }}>GX Painting</Typography>
         <Box sx={{ flex: 1 }} />
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ display: { xs: open ? 'flex' : 'none', sm: 'flex' } }}>
           {SECTION_ORDER.map((id) => (
-            <Link key={id} href={`#${id}`} underline="none" color="text.secondary" sx={{ '&:hover': { color: 'text.primary' } }}>
+            <Link key={id} href={`#${id}`} underline="none" sx={{ '&:hover': { color: 'text.primary' } }}>
               {id.charAt(0).toUpperCase() + id.slice(1)}
             </Link>
           ))}
@@ -52,11 +46,12 @@ function Nav() {
 
 function Hero() {
   return (
-    <Box id="hero" sx={{ position: 'relative', overflow: 'hidden', py: { xs: 10, md: 16 }, backgroundColor: '#f9fafb' }}>
+    <Box id="hero" sx={{ position: 'relative', overflow: 'hidden', py: { xs: 10, md: 16 }, background: 'linear-gradient(180deg,#ffffff, #f5f7fb)' }}>
+      <PastelBlobs />
       <Container>
         <Stack spacing={3} alignItems="start">
           <Chip label="Trusted • Fast • Clean" variant="outlined" />
-          <Typography variant="h1" sx={{ fontSize: { xs: 36, md: 60 }, lineHeight: 1.05, color: 'text.primary' }}>
+          <Typography variant="h1" sx={{ fontSize: { xs: 36, md: 60 }, lineHeight: 1.05 }}>
             Beautiful finishes, <Box component="span" sx={{ color: 'primary.main' }}>zero hassle</Box>.
           </Typography>
           <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 760 }}>
@@ -104,11 +99,7 @@ function Gallery() {
   const imgs = Array.from({ length: 12 }).map((_, i) => `/gallery/${(i%6)+1}.jpg`)
   return (
     <Section id="gallery" title="Recent Work" subtitle="Before & afters that speak for themselves">
-      <Box sx={{
-        display: 'grid',
-        gridTemplateColumns: { xs: '1fr 1fr', md: 'repeat(3,1fr)' },
-        gap: 1.5,
-      }}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr 1fr', md: 'repeat(3,1fr)' }, gap: 1.5 }}>
         {imgs.map((src, i) => (
           <Paper key={i} sx={{ overflow: 'hidden', aspectRatio: '1/1', position: 'relative' }}>
             <img src={src} alt="Project" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -203,7 +194,7 @@ function Contact() {
         <Input name="details" label="Project details" multiline rows={4} required />
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <Button type="submit" variant="contained" startIcon={<Send size={18} />}>Request estimate</Button>
-          <Button href="tel:+14165551234" variant="outlined" startIcon={<Phone size={18} />}>Call (416) 555-1234</Button>
+          <Button href="tel:+14165551234" variant="outlined" startIcon={<Phone size={18} />}>Call (416) 555‑1234</Button>
         </Stack>
         <Typography variant="caption" color="text.secondary">By submitting, you agree to be contacted about your project.</Typography>
       </Paper>
@@ -216,10 +207,7 @@ function Input(props: any) {
     <Box sx={{ display: 'grid', gap: 0.5, width: '100%' }}>
       <Typography variant="caption" color="text.secondary">{props.label}</Typography>
       <Box component="input" {...props} className="rounded-xl" sx={{
-        bgcolor: '#fff',
-        border: '1px solid rgba(0,0,0,0.1)',
-        px: 2, py: 1.25,
-        color: 'text.primary',
+        bgcolor: '#fff', border: '1px solid rgba(0,0,0,0.1)', px: 2, py: 1.25,
         '&:focus': { outline: '2px solid', outlineColor: 'primary.main' }
       }} />
     </Box>
@@ -229,13 +217,13 @@ function Input(props: any) {
 function Footer() {
   return (
     <Container sx={{ py: 6 }}>
-      <Divider sx={{ mb: 3, opacity: 0.12 }} />
+      <Divider sx={{ mb: 3 }} />
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="space-between" alignItems={{ xs: 'start', sm: 'center' }}>
         <Typography variant="body2" color="text.secondary">© {new Date().getFullYear()} GX Painting. All rights reserved.</Typography>
         <Stack direction="row" spacing={2}>
-          <Link href="#services" color="text.secondary">Services</Link>
-          <Link href="#reviews" color="text.secondary">Reviews</Link>
-          <Link href="#contact" color="text.secondary">Contact</Link>
+          <Link href="#services">Services</Link>
+          <Link href="#reviews">Reviews</Link>
+          <Link href="#contact">Contact</Link>
         </Stack>
       </Stack>
     </Container>
@@ -254,7 +242,7 @@ function StickyCTA() {
 
 function Section({ id, title, subtitle, children }: { id: string, title: string, subtitle?: string, children: React.ReactNode }) {
   return (
-    <Box id={id} sx={{ py: { xs: 8, md: 12 }, backgroundColor: '#f9fafb' }}>
+    <Box id={id} sx={{ py: { xs: 8, md: 12 }, backgroundColor: '#f5f7fb' }}>
       <Container>
         <Stack spacing={3} sx={{ mb: 4 }}>
           <Typography variant="h3">{title}</Typography>
@@ -262,6 +250,15 @@ function Section({ id, title, subtitle, children }: { id: string, title: string,
         </Stack>
         {children}
       </Container>
+    </Box>
+  )
+}
+
+function PastelBlobs() {
+  return (
+    <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -1, overflow: 'hidden' }}>
+      <Box sx={{ position: 'absolute', top: -120, left: -120, width: 360, height: 360, borderRadius: '50%', filter: 'blur(80px)', background: 'radial-gradient(closest-side,#a7f3d0,transparent)' }} />
+      <Box sx={{ position: 'absolute', bottom: -140, right: -140, width: 420, height: 420, borderRadius: '50%', filter: 'blur(90px)', background: 'radial-gradient(closest-side,#bae6fd,transparent)' }} />
     </Box>
   )
 }
@@ -280,13 +277,10 @@ export default function App() {
     hero: <Hero />, services: <Services />, gallery: <Gallery />, process: <Process />, reviews: <Reviews />, faq: <FAQ />, contact: <Contact />
   }), [])
   const { visible, sentinelRef } = useInfiniteSections(SECTION_ORDER.length)
-
   return (
     <Box>
       <Nav />
-      {SECTION_ORDER.slice(0, visible).map((k) => (
-        <React.Fragment key={k}>{sections[k]}</React.Fragment>
-      ))}
+      {SECTION_ORDER.slice(0, visible).map((k) => <React.Fragment key={k}>{sections[k]}</React.Fragment>)}
       <div ref={sentinelRef} />
       <Footer />
       <StickyCTA />
