@@ -1,7 +1,7 @@
 import * as React from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import Gallery from "@/src/components/Gallery";
+import Gallery from "../components/Gallery";
 
 export default function GalleryPage() {
   return (
