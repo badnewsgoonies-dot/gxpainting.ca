@@ -11,7 +11,7 @@
   to = "/index.html"
   status = 200
 
-# Force apex domain (edit to your real domain if needed)
+# (Optional) Force canonical domain — edit to your real domain if/when ready
 [[redirects]]
   from = "https://www.gxpainting.com/*"
   to = "https://gxpainting.com/:splat"
