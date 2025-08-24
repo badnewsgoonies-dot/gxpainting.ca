@@ -1,11 +1,20 @@
 [build]
-  command = "vite build"
-  publish = "dist"
+  command = "npm run build"
+  publish = "dist/client"
 
 [functions]
   directory = "netlify/functions"
 
+# SPA fallback so React Router paths work on reload
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+# (Optional but recommended) Force canonical domain — edit to your real domain
+# Example enforces apex; flip the two lines if you prefer www
+[[redirects]]
+  from = "https://www.gxpainting.com/*"
+  to = "https://gxpainting.com/:splat"
+  status = 301
+  force = true
