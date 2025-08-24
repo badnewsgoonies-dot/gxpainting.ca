@@ -5,13 +5,11 @@
 [functions]
   directory = "netlify/functions"
 
-# React SPA: all routes go to index.html
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# (Optional) Force canonical domain — edit to your real domain if/when ready
 [[redirects]]
   from = "https://www.gxpainting.com/*"
   to = "https://gxpainting.com/:splat"
