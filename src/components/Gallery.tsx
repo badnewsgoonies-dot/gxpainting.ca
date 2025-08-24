@@ -6,7 +6,7 @@ import ImageListItemBar from "@mui/material/ImageListItemBar";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import Skeleton from "@mui/material/Skeleton";
-import { items } from "@/src/data/gallery"; // adjust to relative if not using alias
+import { items } from "../data/gallery"; // adjust to relative if not using alias
 
 function ImgWithPlaceholder({ src, alt }: { src: string; alt?: string }) {
   const [loaded, setLoaded] = React.useState(false);
