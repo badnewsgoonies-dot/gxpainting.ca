@@ -1,37 +1,57 @@
-import { Container, Grid, Typography } from "@mui/material";
-import BeforeAfterSlider from "./BeforeAfterSlider";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
+import ImageListItemBar from "@mui/material/ImageListItemBar";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
+import Skeleton from "@mui/material/Skeleton";
+import { items } from "@/src/data/gallery"; // adjust to relative if not using alias
 
-const demo = [
-  {
-    before: "https://images.unsplash.com/photo-1501045661006-fcebe0257c3f?auto=format&fit=crop&w=1600&q=60",
-    after: "https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=1600&q=60",
-    caption: "Living room repaint — Regal Select Eggshell on walls, Ultra Spec Primer",
-  },
-  {
-    before: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1600&q=60",
-    after: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1600&q=60",
-    caption: "Kitchen refresh — Scuff‑X for durability on high‑traffic surfaces",
-  },
-  {
-    before: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1600&q=60",
-    after: "https://images.unsplash.com/photo-1505691723518-36a5ac3b2f01?auto=format&fit=crop&w=1600&q=60",
-    caption: "Exterior trim — Aura Exterior Satin, 2 coats over primer",
-  },
-];
+function ImgWithPlaceholder({ src, alt }: { src: string; alt?: string }) {
+  const [loaded, setLoaded] = React.useState(false);
+  return (
+    <Box sx={{ position: "relative", width: "100%" }}>
+      {!loaded && <Skeleton variant="rounded" sx={{ position: "absolute", inset: 0, height: "100%" }} />}
+      <img
+        src={src}
+        alt={alt ?? "GX Painting project photo"}
+        loading="lazy"
+        onLoad={() => setLoaded(true)}
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "auto",
+          display: "block",
+          borderRadius: "0.75rem",
+          objectFit: "cover"
+        }}
+      />
+    </Box>
+  );
+}
 
 export default function Gallery() {
+  const theme = useTheme();
+  const upLg = useMediaQuery(theme.breakpoints.up("lg"));
+  const upMd = useMediaQuery(theme.breakpoints.up("md"));
+  const upSm = useMediaQuery(theme.breakpoints.up("sm"));
+
+  const cols = upLg ? 4 : upMd ? 3 : upSm ? 2 : 1;
+  const gap = upSm ? 12 : 8;
+
   return (
-    <Container component="section" sx={{ py: { xs: 6, md: 10 } }}>
-      <Typography variant="h4" sx={{ fontWeight: 800, mb: 3 }}>
-        Recent Work
-      </Typography>
-      <Grid container spacing={3}>
-        {demo.map((item, i) => (
-          <Grid item xs={12} md={6} key={i}>
-            <BeforeAfterSlider before={item.before} after={item.after} caption={item.caption} />
-          </Grid>
+    <Box className="gx-gallery" sx={{ px: { xs: 2, md: 4 }, py: { xs: 2, md: 4 } }}>
+      <ImageList variant="masonry" cols={cols} gap={gap}>
+        {items.map((item, idx) => (
+          <ImageListItem key={idx}>
+            <ImgWithPlaceholder src={item.src} alt={item.alt} />
+            {(item.title || item.subtitle) && (
+              <ImageListItemBar title={item.title} subtitle={item.subtitle} position="below" />
+            )}
+          </ImageListItem>
         ))}
-      </Grid>
-    </Container>
+      </ImageList>
+    </Box>
   );
 }
