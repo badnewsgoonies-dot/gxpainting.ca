@@ -3,7 +3,22 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: light; }
+:root {
+  color-scheme: light;
+  --app-bg: linear-gradient(135deg, #f5f7fb 0%, #e0e5ec 100%);
+}
+
 html, body, #root { height: 100%; }
-body { margin: 0; background: #f5f7fb; color: #111827; font-family: Inter, ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif; }
+
+body {
+  margin: 0;
+  background: var(--app-bg);
+  color: #111827;
+  font-family: Inter, ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
+}
+
 html { scroll-behavior: smooth; }
+
+::selection {
+  background-color: #a7f3d0;
+}
