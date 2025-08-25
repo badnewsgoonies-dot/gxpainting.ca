@@ -1,32 +1,41 @@
+// src/pages/Home.tsx
+import * as React from "react";
+import { Box, Container, Stack, Typography } from "@mui/material";
 import Hero from "../components/Hero";
-import EstimateBand from "../components/EstimateBand";
 import Gallery from "../components/Gallery";
-import Reviews from "../components/Reviews";
-import FAQ from "../components/FAQ";
-import ContactSection from "../components/ContactSection";
-import StickyMobileCTA from "../components/StickyMobileCTA";
-import LocalBusinessSchema from "../components/LocalBusinessSchema";
+import ContactForm from "../components/ContactForm";
+
+const Panel = ({ id, title, children }: React.PropsWithChildren<{ id: string; title?: string }>) => (
+  <Box id={id} sx={{ scrollSnapAlign: "start", py: { xs: 6, md: 10 } }}>
+    <Container>
+      {title && <Typography variant="h2" sx={{ mb: 3 }}>{title}</Typography>}
+      {children}
+    </Container>
+  </Box>
+);
 
 export default function Home() {
   return (
-    <>
-      <LocalBusinessSchema
-        name="GX Painting LTD"
-        url="https://gxpainting.com/"
-        email="gxpainting@hotmail.com"
-        telephone="+1-416-560-8741"
-        locality="King City"
-        region="ON"
-        country="CA"
-        areaServed="Greater Toronto Area"
-      />
-      <Hero />
-      <EstimateBand />
-      <Gallery />
-      <Reviews />
-      <FAQ />
-      <ContactSection />
-      <StickyMobileCTA />
-    </>
+    <Box sx={{ scrollSnapType: { xs: "none", md: "y proximity" } }}>
+      {/* HERO */}
+      <Box sx={{ scrollSnapAlign: "start" }}>
+        <Hero />
+      </Box>
+
+      {/* OUR WORK */}
+      <Panel id="work" title="Recent Work">
+        <Gallery />
+      </Panel>
+
+      {/* CONTACT */}
+      <Panel id="contact" title="Get a Same‑Day Quote">
+        <Stack spacing={2}>
+          <Typography variant="body2" color="text.secondary">
+            Tell us about the rooms, timelines, and any repairs—we’ll get back the same day.
+          </Typography>
+          <ContactForm />
+        </Stack>
+      </Panel>
+    </Box>
   );
 }
