@@ -1,10 +1,9 @@
 // src/App.tsx
 import * as React from "react";
 import SiteHeader from "./layout/SiteHeader";
-import SiteFooter from "./layout/SiteFooter";
-import Home from "./pages/Home";
 import StickyMobileCTA from "./components/StickyMobileCTA";
 import LocalBusinessSchema from "./components/LocalBusinessSchema";
+import Home from "./pages/Home";
 
 export default function App() {
   return (
@@ -22,7 +21,6 @@ export default function App() {
       <SiteHeader />
       <Home />
       <StickyMobileCTA />
-      <SiteFooter />
     </>
   );
 }

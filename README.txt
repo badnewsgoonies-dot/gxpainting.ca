@@ -1,22 +1,21 @@
 
-GX Layout Lite — Only Hero, Our Work, and Contact
--------------------------------------------------
-This pack removes *Services*, *Process*, *Reviews*, and *FAQ* sections and updates the header.
+GX Cleanup Pack — Force the Lite Layout live
+--------------------------------------------
+This pack deletes Services/Process/Reviews/FAQ pages, replaces the header and home,
+and pushes your changes so Netlify will redeploy.
 
-FILES
-- src/layout/SiteHeader.tsx   (nav now has only "Our Work" and "Contact")
-- src/pages/Home.tsx          (contains just Hero → Our Work → Contact)
-- src/styles/scroll-snap.css  (optional)
-- src/App.tsx                 (example wiring)
+FILES INCLUDED
+- src/layout/SiteHeader.tsx  (nav: Our Work + Contact)
+- src/pages/Home.tsx         (Hero → Work → Contact only)
+- src/App.tsx                (renders <Home />; includes schema + sticky CTA)
+- apply_cleanup.ps1          (PowerShell script to apply + commit + push)
 
-STEPS
-1) Copy files to the same paths in your project (overwrite when asked).
-2) Ensure you have:
-   - src/components/Hero.tsx
-   - src/components/Gallery.tsx
-   - src/components/ContactForm.tsx
-3) (Optional) In main.tsx, import global CSS:
-   import "./styles/scroll-snap.css";
-4) Delete any unused route/page files if present (e.g., Services/Process/Reviews/FAQ pages)
-   or simply leave them—this layout does not render them.
-5) Deploy.
+USAGE (Windows PowerShell)
+1) Extract this zip anywhere.
+2) Run:
+   ./apply_cleanup.ps1 -RepoPath "E:\path\to\your\repo" -Branch "main"
+3) Watch Netlify auto-deploy.
+
+Notes
+- If your branch isn’t `main`, pass the correct one.
+- If files don't exist, the script ignores them safely.

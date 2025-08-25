@@ -17,17 +17,12 @@ const Panel = ({ id, title, children }: React.PropsWithChildren<{ id: string; ti
 export default function Home() {
   return (
     <Box sx={{ scrollSnapType: { xs: "none", md: "y proximity" } }}>
-      {/* HERO */}
       <Box sx={{ scrollSnapAlign: "start" }}>
         <Hero />
       </Box>
-
-      {/* OUR WORK */}
       <Panel id="work" title="Recent Work">
         <Gallery />
       </Panel>
-
-      {/* CONTACT */}
       <Panel id="contact" title="Get a Same‑Day Quote">
         <Stack spacing={2}>
           <Typography variant="body2" color="text.secondary">
